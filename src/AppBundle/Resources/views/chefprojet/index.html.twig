@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ChefProjet list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Datenaiss</th>
+                <th>Adresse</th>
+                <th>Email</th>
+                <th>Salaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for chefProjet in chefProjets %}
+            <tr>
+                <td><a href="{{ path('chefprojet_show', { 'id': chefProjet.id }) }}">{{ chefProjet.id }}</a></td>
+                <td>{{ chefProjet.nom }}</td>
+                <td>{{ chefProjet.prenom }}</td>
+                <td>{% if chefProjet.dateNaiss %}{{ chefProjet.dateNaiss|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ chefProjet.adresse }}</td>
+                <td>{{ chefProjet.email }}</td>
+                <td>{{ chefProjet.salaire }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('chefprojet_show', { 'id': chefProjet.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('chefprojet_edit', { 'id': chefProjet.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('chefprojet_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

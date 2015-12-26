@@ -1,0 +1,24 @@
+chefprojet_index:
+    path:     /
+    defaults: { _controller: "AppBundle:ChefProjet:index" }
+    methods:  GET
+
+chefprojet_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBundle:ChefProjet:show" }
+    methods:  GET
+
+chefprojet_new:
+    path:     /new
+    defaults: { _controller: "AppBundle:ChefProjet:new" }
+    methods:  [GET, POST]
+
+chefprojet_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBundle:ChefProjet:edit" }
+    methods:  [GET, POST]
+
+chefprojet_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBundle:ChefProjet:delete" }
+    methods:  DELETE

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>ChefProjet</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ chefProjet.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ chefProjet.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ chefProjet.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Datenaiss</th>
+                <td>{% if chefProjet.dateNaiss %}{{ chefProjet.dateNaiss|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ chefProjet.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ chefProjet.email }}</td>
+            </tr>
+            <tr>
+                <th>Salaire</th>
+                <td>{{ chefProjet.salaire }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('chefprojet_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('chefprojet_edit', { 'id': chefProjet.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
