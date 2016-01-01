@@ -1,0 +1,158 @@
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+
+
+    {% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+ 
+<!--==================================
+        Login modal window
+======================================-->
+<script>
+    $(document).ready(function(){
+
+        $('#_submit').click(function(e){
+        
+      
+          $('.error').html("") ;
+          $('.erroruser').html("") ;
+          $('.errorpass').html("") ;
+          
+          var input = document.getElementsByTagName("input");
+          var test=false;
+
+         for(i = 4;i < input.length; i++)
+              {
+              
+                 if (input[i].value  == "" )
+                    {
+                   test = true;
+                    return true ;
+                   }
+              }
+
+          if(test == false)
+            e.preventDefault();
+
+            $.ajax(
+                 {
+                 type: "POST",
+                 url: "{{ path('fos_user_registration_register') }}",
+                 data: $('form').serialize(),
+                 dataType    : "html",
+                 success     : function(data, status, object) {
+                     //    alert(data) ;
+                         var n = data.lastIndexOf("email.already_used</li></ul>");
+                         var res = data.substring(n-9,n+18);
+                     
+                        if(res == "fos_user.email.already_used" ){
+                         $('.error').html(res);
+                         $('.error').hide(); 
+                         $('.error').show('slow');
+                        }
+
+                         var n1 = data.lastIndexOf("username.already_used</li></ul>");
+                         var res1 = data.substring(n1-9,n1+21); 
+                      
+                         if(res1 == "fos_user.username.already_used" ){
+                         $('.erroruser').html(res1);
+                         $('.erroruser').hide(); 
+                         $('.erroruser').show('slow');
+                       }
+
+                          var n2 = data.lastIndexOf("password.mismatch</li></ul>");
+                          var res2 = data.substring(n2-9,n2+17); 
+                            if(res2 == "fos_user.password.mismatch" ){
+                         $('.errorpass').html(res2);
+                         $('.errorpass').hide(); 
+                         $('.errorpass').show('slow');
+                       }                       
+
+
+     if ( res !='fos_user.email.already_used' && res1 != 'fos_user.username.already_used' && res2 != 'fos_user.password.mismatch')
+     {
+      document.location.href="../app_dev.php/"
+     }
+                    },
+                error: function(data, status, object){
+                    console.log(data.message);
+                }
+            });
+        });
+    });
+
+</script>
+<div id="login_mw" class="modal_window">
+
+    <button class="close arcticmodal-close"></button>
+
+    <header class="on_the_sides">
+
+        <div class="left_side">
+
+            <h2>Register</h2>
+
+        </div>
+
+        <div class="right_side">
+
+            <a href="login" class="button_grey middle_btn">LogIn</a>
+
+        </div>
+
+    </header><!--/ .on_the_sides-->
+    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register type_2">
+  {{ form_errors(form) }}
+        <ul>
+
+            <li>
+             {{ form_label(form.email,'Email address') }}
+              <div class="error"></div>
+          
+              {{ form_errors(form.email) }}
+    
+              {{ form_widget(form.email, {'attr': {'placeholder': 'Email address'}}) }}         
+            </li>
+            <li>
+            
+             {{ form_label(form.username,'Username') }}
+            <div class="erroruser"></div> 
+            
+             {{ form_errors(form.username) }}
+         
+             {{ form_widget(form.username, {'attr': {'placeholder': 'Username'}}) }}     
+            </li>
+            <li>
+              
+              {{ form_label(form.plainPassword.first,'Password' |trans) }}
+            <div class="errorpass"></div>  
+              {{ form_errors(form.plainPassword.first) }}
+              {{ form_widget(form.plainPassword.first, {'attr':{'placeholder': 'Password'} }) }}
+            </li>
+            <li>
+              {{ form_label(form.plainPassword.second,'Password confirmation') }}
+             {{ form_errors(form.plainPassword.second) }}
+                {{ form_widget(form.plainPassword.second, {'attr': {'placeholder': 'Password Confirmation'}}) }}
+            </li>           
+            <li>
+            {{  form_rest(form)}}
+            <input type="submit" class="button_blue middle_btn" id="_submit" value="{{ 'enregister'|trans }}" />
+            </li>
+        </ul>
+
+    </form>
+
+
+</div>
+
+<!--==================================
+        End login modal window
+======================================-->
+        {% else %}
+
+        <SCRIPT LANGUAGE="JavaScript">
+            document.location.href="../"
+        </SCRIPT>
+    {% endif %}
+</div>
+

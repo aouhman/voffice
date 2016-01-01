@@ -1,0 +1,13 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+<p>
+Félicitations, votre compte proptical a été créé.
+{{ 'resetting.check_email'|trans({'%email%': email}) }}
+</p>
+ <SCRIPT LANGUAGE="JavaScript">
+                   document.location.href="http://localhost/proptical/web/app_dev.php/"
+ </SCRIPT>
+{% endblock %}

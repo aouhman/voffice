@@ -1,0 +1,137 @@
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+
+<style type="text/css">
+  .vert{
+  background-color :rgb(42, 207, 88)
+ }
+</style>
+
+<script>
+    $(document).ready(function(){
+        $('#_submit').click(function(e){        
+          $('.error').html("") ;
+          $( "#_submit" ).addClass( "vert" );
+           if(document.getElementById("username").value != "") {
+           e.preventDefault();
+           }else
+           return true ;
+           if(document.getElementById("password").value != "") {
+           e.preventDefault();
+           }else
+           return true ;
+
+            $.ajax(
+                 {
+                 type: "POST",
+                 url: "{{ path("fos_user_security_check") }}",
+                 data: $('form').serialize(),
+                 dataType    : "json",
+                 success     : function(data, status, object) {
+                    if(data.error){ 
+                      $('.error').html(data.message);
+                     $('.error').hide(); 
+                    $('.error').show('slow'); 
+                     $( "#_submit" ).removeClass( "vert" );
+                    }
+                    else {
+                    window.location.href = data.targetUrl;
+                }
+                },
+                error: function(data, status, object){
+                    console.log(data.message);
+                }
+            }); 
+
+        });
+    });
+</script>
+
+    {% block body %}
+           {% if not is_granted("IS_AUTHENTICATED_REMEMBERED")  %}
+
+               <div id="login_mw" class="modal_window">
+
+                   <button class="close arcticmodal-close"></button>
+
+                   <header class="on_the_sides">
+
+                       <div class="left_side">
+
+                           <h2>Log In</h2>
+
+                       </div>
+
+                       <div class="right_side">
+
+                           <a href="#" class="button_grey middle_btn" >Register</a>
+
+                       </div>
+
+                   </header><!--/ .on_the_sides-->
+                      <div class="error"></div>
+                     <form action="{{ path("fos_user_security_check") }}" method="POST" class="type_2" name="form" id="form">
+                       <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                       <ul>
+                             
+                           <li>
+                               <label for="username">Email address OR Username</label>
+                               <input type="text"  id="username" name="_username"  required="required"  value="{{ last_username }}" placeholder="username"   />
+                           </li>
+
+                           <li>
+                               <label for="password">Password</label>
+                               <input  type="password" id="password" name="_password" required="required"   placeholder="Password" />
+                           </li>
+
+                           <li>
+                               <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                               <label for="remember_me">Remember me</label>
+                           </li>
+
+                           <li class="v_centered">
+                               <input  type="submit" id="_submit" name="_submit" class="button_blue middle_btn" value="login" />
+                               <a href="#" data-modal-url="http://localhost/proptical/web/modals/promo.html" class="small_link">Forgot your password?</a>
+                           </li>
+
+                       </ul>
+
+                   </form>
+
+                   <hr>
+
+                   <div class="streamlined">
+
+                       <h4 class="streamlined_title">OR Log In With</h4>
+
+                       <!--Social icon's list-->
+                       <ul class="horizontal_list social_btns">
+
+                           <li><a href="connect/facebook" class="icon_btn middle_btn social_facebook tooltip_container"><i class="icon-facebook-1"></i><span class="tooltip top">Facebook</span></a></li>
+                           <li><a href="connect/twitter" class="icon_btn middle_btn social_twitter tooltip_container"><i class="icon-twitter"></i><span class="tooltip top">Twitter</span></a></li>
+                           <li><a href="connect/google" class="icon_btn middle_btn social_googleplus tooltip_container"><i class="icon-gplus-2"></i><span class="tooltip top">GooglePlus</span></a></li>
+
+                       </ul><!--/ .horizontal_list.wrapper.social_btns-->
+                       <!--End social icon's list-->
+
+                   </div><!--/ .streamlined-->
+
+               </div>
+ 
+
+
+        <!-- Theme files
+        ============================================ -->
+       
+               <!--==================================
+                       End login modal window
+               ======================================-->
+           {% else %}
+               <SCRIPT LANGUAGE="JavaScript">
+                   document.location.href="http://localhost/proptical/web/app_dev.php/"
+               </SCRIPT>
+           {% endif %}
+    {% endblock %}
+{% endblock fos_user_content %}
